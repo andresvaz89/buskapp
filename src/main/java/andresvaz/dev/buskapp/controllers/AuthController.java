@@ -1,4 +1,4 @@
-/* package andresvaz.dev.buskapp.controllers;
+package andresvaz.dev.buskapp.controllers;
 
 import andresvaz.dev.buskapp.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,4 +34,3 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse(token));
     }
 }
- */

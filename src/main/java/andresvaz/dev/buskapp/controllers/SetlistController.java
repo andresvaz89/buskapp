@@ -16,36 +16,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import andresvaz.dev.buskapp.entities.Repertorio;
-import andresvaz.dev.buskapp.services.RepertorioService;
+import andresvaz.dev.buskapp.entities.Setlist;
+import andresvaz.dev.buskapp.services.SetlistService;
 import jakarta.persistence.EntityNotFoundException;
 
 
 @RestController
-@RequestMapping("/api/repertorios")
-public class RepertorioController {
+@RequestMapping("/api/setlists")
+public class SetlistController {
 
     @Autowired
-    private RepertorioService repertorioService;
+    private SetlistService setlistService;
 
     @GetMapping
-    public ResponseEntity<List<Repertorio>> obtenerTodosLosRepertorios() {
-        return ResponseEntity.ok(repertorioService.obtenerTodosLosRepertorios());
+    public ResponseEntity<List<Setlist>> getAllSetlists() {
+        return ResponseEntity.ok(setlistService.getAllSetlists());
     }
 
-    @GetMapping("/musico/{musicoId}")
-    public ResponseEntity<List<Repertorio>> obtenerRepertoriosPorMusico(@PathVariable Long musicoId) {
-        return ResponseEntity.ok(repertorioService.obtenerRepertoriosPorMusico(musicoId));
+    @GetMapping("/artist/{artistId}")
+    public ResponseEntity<List<Setlist>> getAllSetlistsByArtist(@PathVariable Long artistId) {
+        return ResponseEntity.ok(setlistService.getAllSetlistsByArtist(artistId));
     }
 
-    @PostMapping("/musico/{musicoId}")
-    public ResponseEntity<Repertorio> crearRepertorio(
-            @PathVariable Long musicoId,
-            @RequestBody Repertorio repertorio,
-            @RequestParam List<Long> cancionesIds) {
+    @PostMapping("/artist/{artistId}")
+    public ResponseEntity<Setlist> createSetlist(
+            @PathVariable Long artistId,
+            @RequestBody Setlist Setlist,
+            @RequestParam List<Long> songId) {
         try {
-            Repertorio nuevoRepertorio = repertorioService.crearRepertorio(repertorio, musicoId, cancionesIds);
-            return new ResponseEntity<>(nuevoRepertorio, HttpStatus.CREATED);
+            Setlist newSetlist = setlistService.createSetlist(Setlist, artistId, songId);
+            return new ResponseEntity<>(newSetlist, HttpStatus.CREATED);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (IllegalArgumentException e) {
@@ -54,12 +54,12 @@ public class RepertorioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Repertorio> actualizarRepertorio(
+    public ResponseEntity<Setlist> updateSetlist(
             @PathVariable Long id,
-            @RequestBody Repertorio repertorioActualizado,
-            @RequestParam List<Long> cancionesIds) {
+            @RequestBody Setlist updatedSetlist,
+            @RequestParam List<Long> songId) {
         try {
-            return ResponseEntity.ok(repertorioService.actualizarRepertorio(id, repertorioActualizado, cancionesIds));
+            return ResponseEntity.ok(setlistService.updateSetlist(id, updatedSetlist, songId));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (IllegalArgumentException e) {
@@ -68,9 +68,9 @@ public class RepertorioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarRepertorio(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSetlist(@PathVariable Long id) {
         try {
-            repertorioService.eliminarRepertorio(id);
+            setlistService.deleteSetlist(id);
             return ResponseEntity.noContent().build();
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();

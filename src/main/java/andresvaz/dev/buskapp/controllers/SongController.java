@@ -16,59 +16,59 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import andresvaz.dev.buskapp.entities.Cancion;
-import andresvaz.dev.buskapp.entities.Musico;
-import andresvaz.dev.buskapp.repositories.CancionRepository;
-import andresvaz.dev.buskapp.repositories.MusicoRepository;
+import andresvaz.dev.buskapp.entities.Song;
+import andresvaz.dev.buskapp.entities.Artist;
+import andresvaz.dev.buskapp.repositories.SongRepository;
+import andresvaz.dev.buskapp.repositories.ArtistRepository;
 
 import andresvaz.dev.buskapp.services.*;
 
 @RestController
-@RequestMapping("/canciones")
-public class CancionController {
+@RequestMapping("/songs")
+public class SongController {
     @Autowired
-    private CancionRepository cancionRepository;
+    private SongRepository songRepository;
 
     @Autowired
-    private MusicoRepository musicoRepository;
+    private ArtistRepository artistRepository;
 
     @GetMapping
-    public List<Cancion> listarCanciones() {
-        return cancionRepository.findAll();
+    public List<Song> listarSongs() {
+        return songRepository.findAll();
     }
 
     @PostMapping
     @PreAuthorize("hasRole('MUSICO')")
-    public Cancion crearCancion(@RequestBody Cancion cancion, Authentication auth) {
-        Musico musico = musicoRepository.findByEmail(auth.getName())
+    public Song crearSong(@RequestBody Song song, Authentication auth) {
+        Artist artist = artistRepository.findByEmail(auth.getName())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
-        cancion.setMusico(musico);
-        return cancionRepository.save(cancion);
+        song.setArtist(artist);
+        return songRepository.save(song);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('MUSICO')")
-    public Cancion actualizarCancion(@PathVariable Long id, @RequestBody Cancion cancionActualizada, Authentication auth) {
-        Cancion cancion = cancionRepository.findById(id)
+    public Song actualizarSong(@PathVariable Long id, @RequestBody Song updatedSong, Authentication auth) {
+        Song song = songRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        if (!cancion.getMusico().getEmail().equals(auth.getName())) {
+        if (!song.getArtist().getEmail().equals(auth.getName())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        cancion.setTitulo(cancionActualizada.getTitulo());
-        cancion.setArtistaOriginal(cancionActualizada.getArtistaOriginal());
-        cancion.setTonalidad(cancionActualizada.getTonalidad());
-        cancion.setGenero(cancionActualizada.getGenero());
-        return cancionRepository.save(cancion);
+        song.setTitle(updatedSong.getTitle());
+        song.setOriginalArtist(updatedSong.getOriginalArtist());
+        song.setKey(updatedSong.getKey());
+        song.setGenre(updatedSong.getGenre());
+        return songRepository.save(song);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('MUSICO')")
-    public void eliminarCancion(@PathVariable Long id, Authentication auth) {
-        Cancion cancion = cancionRepository.findById(id)
+    public void eliminarSong(@PathVariable Long id, Authentication auth) {
+        Song song = songRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        if (!cancion.getMusico().getEmail().equals(auth.getName())) {
+        if (!song.getArtist().getEmail().equals(auth.getName())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        cancionRepository.delete(cancion);
+        songRepository.delete(song);
     }
 }

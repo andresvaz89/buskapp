@@ -10,14 +10,14 @@ import java.util.Collections;
 import java.util.List;
 
 @Entity
-public class Musico implements UserDetails {
+public class Artist implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true) // Aseguramos que el nombre sea único para autenticación
-    private String nombre;
+    private String username;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -28,19 +28,19 @@ public class Musico implements UserDetails {
     @Column(nullable = false)
     private String role; // Ejemplo: "ROLE_USER" o "ROLE_ADMIN"
 
-    @OneToMany(mappedBy = "musico", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Repertorio> repertorios;
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Setlist> Setlists;
 
-    @OneToMany(mappedBy = "musico", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Cancion> canciones;
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Song> songs;
 
     // Constructor vacío
-    public Musico() {
+    public Artist() {
     }
 
     // Constructor con parámetros
-    public Musico(String nombre, String password, String email, String role) {
-        this.nombre = nombre;
+    public Artist(String username, String password, String email, String role) {
+        this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
@@ -55,12 +55,12 @@ public class Musico implements UserDetails {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getUsername() {
+        return username;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
@@ -72,10 +72,7 @@ public class Musico implements UserDetails {
         this.password = password;
     }
 
-    @Override
-    public String getUsername() {
-        return nombre; // Usamos el campo "nombre" como el nombre de usuario
-    }
+
 
     public String getEmail() {
         return email;
@@ -93,20 +90,20 @@ public class Musico implements UserDetails {
         this.role = role;
     }
 
-    public List<Repertorio> getRepertorios() {
-        return repertorios;
+    public List<Setlist> getSetlists() {
+        return Setlists;
     }
 
-    public void setRepertorios(List<Repertorio> repertorios) {
-        this.repertorios = repertorios;
+    public void setSetlists(List<Setlist> Setlists) {
+        this.Setlists = Setlists;
     }
 
-    public List<Cancion> getCanciones() {
-        return canciones;
+    public List<Song> getSongs() {
+        return songs;
     }
 
-    public void setCanciones(List<Cancion> canciones) {
-        this.canciones = canciones;
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
     }
 
     // Métodos de UserDetails
@@ -141,9 +138,9 @@ public class Musico implements UserDetails {
 
     @Override
     public String toString() {
-        return "Musico{" +
+        return "Artist{" +
                 "id=" + id +
-                ", nombre='" + nombre + '\'' +
+                ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", role='" + role + '\'' +
                 '}';

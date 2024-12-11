@@ -15,49 +15,49 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import andresvaz.dev.buskapp.entities.Musico;
-import andresvaz.dev.buskapp.services.MusicoService;
+import andresvaz.dev.buskapp.entities.Artist;
+import andresvaz.dev.buskapp.services.ArtistService;
 import jakarta.persistence.EntityNotFoundException;
 
 
 
 @RestController
-@RequestMapping("/api/musicos")
-public class MusicoController {
+@RequestMapping("/api/artists")
+public class ArtistController {
 
     @Autowired
-    private MusicoService musicoService;
+    private ArtistService artistService;
 
     @GetMapping
-    public ResponseEntity<List<Musico>> obtenerTodosLosMusicos() {
-        return ResponseEntity.ok(musicoService.obtenerTodosLosMusicos());
+    public ResponseEntity<List<Artist>> getAllArtists() {
+        return ResponseEntity.ok(artistService.getAllArtists());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Musico> obtenerMusicoPorId(@PathVariable Long id) {
-        return musicoService.obtenerMusicoPorId(id)
+    public ResponseEntity<Artist> getArtistById(@PathVariable Long id) {
+        return artistService.getArtistById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Musico> crearMusico(@RequestBody Musico musico) {
-        return new ResponseEntity<>(musicoService.crearMusico(musico), HttpStatus.CREATED);
+    public ResponseEntity<Artist> addArtist(@RequestBody Artist artist) {
+        return new ResponseEntity<>(artistService.addArtist(artist), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Musico> actualizarMusico(@PathVariable Long id, @RequestBody Musico musico) {
+    public ResponseEntity<Artist> actualizarArtist(@PathVariable Long id, @RequestBody Artist artist) {
         try {
-            return ResponseEntity.ok(musicoService.actualizarMusico(id, musico));
+            return ResponseEntity.ok(artistService.updateArtist(id, artist));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarMusico(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarArtist(@PathVariable Long id) {
         try {
-            musicoService.eliminarMusico(id);
+            artistService.deleteArtist(id);
             return ResponseEntity.noContent().build();
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
