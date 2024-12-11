@@ -1,6 +1,5 @@
 package andresvaz.dev.buskapp.entities;
 
-
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,12 +16,17 @@ public class Musico implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true) // Aseguramos que el nombre sea único para autenticación
     private String nombre;
-    private String password;
+
+    @Column(nullable = false, unique = true)
     private String email;
 
-    // Rol del usuario, ejemplo: "ROLE_USER" o "ROLE_ADMIN"
-    private String role;
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private String role; // Ejemplo: "ROLE_USER" o "ROLE_ADMIN"
 
     @OneToMany(mappedBy = "musico", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Repertorio> repertorios;
@@ -59,12 +63,18 @@ public class Musico implements UserDetails {
         this.nombre = nombre;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String getUsername() {
+        return nombre; // Usamos el campo "nombre" como el nombre de usuario
     }
 
     public String getEmail() {
@@ -103,17 +113,15 @@ public class Musico implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (role == null || role.isBlank()) {
+            throw new IllegalStateException("El rol del usuario no puede estar vacío");
+        }
         return Collections.singletonList(new SimpleGrantedAuthority(role));
     }
 
     @Override
-    public String getUsername() {
-        return email; // Utilizamos el email como el nombre de usuario
-    }
-
-    @Override
     public boolean isAccountNonExpired() {
-        return true; // Puedes personalizar esta lógica si necesitas manejar cuentas expiradas
+        return true; // Personaliza esta lógica si necesitas manejar cuentas expiradas
     }
 
     @Override
@@ -131,7 +139,6 @@ public class Musico implements UserDetails {
         return true; // Personaliza si necesitas manejar el estado de la cuenta (activo/inactivo)
     }
 
-    // Método toString (opcional)
     @Override
     public String toString() {
         return "Musico{" +

@@ -1,4 +1,4 @@
-
+/* 
 
 -- Tabla 'musico'
 INSERT INTO musico (id, email, nombre, password) VALUES 
@@ -31,3 +31,4 @@ INSERT INTO repertorio_cancion (repertorio_id, cancion_id) VALUES
 (2, 6),
 (2, 7),
 (2, 8);
+ */
