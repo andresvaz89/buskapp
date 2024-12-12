@@ -16,14 +16,10 @@ public class Artist {
     private String name;
     private String email;
     private String password;
+    private String role;
 
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.USER; // Roles predefinidos: USER por defecto.
-
-    public enum Role {
-        USER,
-        ADMIN
-    }
+ 
+  
 
     // Getters
     public Long getId() {
@@ -42,7 +38,7 @@ public class Artist {
         return password;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
@@ -59,7 +55,7 @@ public class Artist {
         this.password = password;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 }

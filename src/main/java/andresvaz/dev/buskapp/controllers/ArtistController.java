@@ -47,9 +47,14 @@ public class ArtistController {
         return ResponseEntity.notFound().build();
     }
 
-    /**
-     * Actualizar un artista por su ID.
-     */
+    @GetMapping("/hello")
+    public String sayHello() {
+        return "hello";
+    }
+    @GetMapping("/adios")
+    public String sayAdios() {
+        return "Adios";
+    }
     @PutMapping("/{id}")
     public ResponseEntity<Artist> updateArtist(@PathVariable Long id, @RequestBody Artist artistDetails) {
         Artist updatedArtist = artistService.updateArtist(id, artistDetails);

@@ -1,16 +1,12 @@
-/* package andresvaz.dev.buskapp.services;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+package andresvaz.dev.buskapp.services;
 
 import andresvaz.dev.buskapp.entities.Song;
-import andresvaz.dev.buskapp.entities.Artist;
 import andresvaz.dev.buskapp.repositories.SongRepository;
-import andresvaz.dev.buskapp.repositories.ArtistRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SongService {
@@ -18,46 +14,54 @@ public class SongService {
     @Autowired
     private SongRepository songRepository;
 
-    @Autowired
-    private ArtistRepository artistRepository;
+    /**
+     * Crear una canción
+     */
+    public Song addSong(Song song) {
+        return songRepository.save(song);
+    }
 
+    /**
+     * Obtener todas las canciones
+     */
     public List<Song> getAllSongs() {
         return songRepository.findAll();
     }
 
-    public Song createSong(Song song, String userEmail) {
-        Artist artist = artistRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No autorizado"));
+    /**
+     * Obtener una canción por ID
+     */
+    public Optional<Song> getSongById(Long id) {
+        return songRepository.findById(id);
+    }
+
+    /**
+     * Actualizar una canción
+     */
+    public Song updateSong(Long id, Song songDetails) throws Exception {
+        Optional<Song> songOptional = songRepository.findById(id);
         
-        song.setArtist(artist);
-        return songRepository.save(song);
-    }
-
-    public Song updateSong(Long id, Song updatedSong, String userEmail) {
-        Song song = songRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Canción no encontrada"));
-
-        if (!song.getArtist().getEmail().equals(userEmail)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No puedes actualizar esta canción");
+        if (songOptional.isEmpty()) {
+            throw new Exception("Song not found");
         }
 
-        song.setTitle(updatedSong.getTitle());
-        song.setOriginalArtist(updatedSong.getOriginalArtist());
-        song.setSongkey(updatedSong.getSongkey());
-        song.setGenre(updatedSong.getGenre());
+        Song songToUpdate = songOptional.get();
+        songToUpdate.setTitle(songDetails.getTitle());
+        songToUpdate.setSongKey(songDetails.getSongKey());
+        songToUpdate.setOriginalArtist(songDetails.getOriginalArtist());
+        songToUpdate.setArtist(songDetails.getArtist());
 
-        return songRepository.save(song);
+        return songRepository.save(songToUpdate);
     }
 
-    public void deleteSong(Long id, String userEmail) {
-        Song song = songRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Canción no encontrada"));
-
-        if (!song.getArtist().getEmail().equals(userEmail)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No puedes eliminar esta canción");
+    /**
+     * Eliminar una canción
+     */
+    public void deleteSong(Long id) throws Exception {
+        if (!songRepository.existsById(id)) {
+            throw new Exception("Song not found");
         }
 
-        songRepository.delete(song);
+        songRepository.deleteById(id);
     }
 }
- */

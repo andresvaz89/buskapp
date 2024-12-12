@@ -1,0 +1,118 @@
+# 🚀 **BuskApp - Aplicación de Gestión Musical**
+
+---
+
+## 📌 **Descripción**
+
+`BuskApp` es una aplicación desarrollada con **Java, Spring Boot y MySQL**, diseñada para gestionar artistas, canciones, y conjuntos musicales (setlists). Ofrece operaciones CRUD para interactuar con la base de datos, gestionar canciones y sus relaciones con artistas y setlists.
+
+---
+
+## 🛠️ **Tecnologías**
+
+- **Backend:** Java con Spring Boot  
+- **Base de datos:** MySQL  
+- **ORM:** JPA (Java Persistence API) + Hibernate  
+- **Seguridad:** Spring Security  
+- **Frameworks & Herramientas:**  
+  - MySQL Workbench para modelado  
+  - Spring Boot DevTools  
+  - Maven como gestor de dependencias  
+
+---
+
+## 🚀 **Características**
+
+### ✅ **Módulos Principales**
+
+- **🎤 Gestión de artistas:** Crear, leer, actualizar y eliminar información de artistas.  
+- **🎶 Gestión de canciones:** CRUD para canciones y asignarlas a artistas.  
+- **📜 Gestión de setlists:** Crear relaciones entre canciones y artistas.  
+- **🔒 Seguridad básica:** Autenticación y autorización para proteger los endpoints.
+
+---
+
+## 📥 **Requisitos previos**
+
+1. **Java Development Kit (JDK):**  
+   Debes tener instalada una versión **Java 17 o superior**.  
+   [📎 Descargar desde aquí](https://www.oracle.com/java/technologies/javase-downloads.html)
+
+2. **MySQL Server:**  
+   - Instala MySQL en tu sistema.
+   - Crea la base de datos correspondiente o usa una ya existente.
+   - Herramientas recomendadas: [MySQL Workbench](https://www.mysql.com/products/workbench/).
+
+3. **Spring Boot & Maven:**  
+   El proyecto usa Maven para gestionar dependencias. Instala Maven en caso de no tenerlo.
+
+---
+
+## 🛠️ **Instalación**
+
+### 1. **Clonar el repositorio:**
+```bash
+git clone https://github.com/andresvaz89/buskapp
+cd buskapp
+
+
+## 🛠️ **Configurar la base de datos MySQL**
+Crear la base de datos buskapp:
+
+
+
+CREATE DATABASE buskapp;
+
+## 🛠️ **Configurar el application.properties**
+spring.application.name=buskapp
+
+spring.datasource.url=jdbc:mysql://localhost:3306/buskapp?createDatabaseIfNotExist=true
+spring.datasource.username=root
+spring.datasource.password=tu_contraseña
+spring.sql.init.mode=always
+spring.jpa.hibernate.ddl-auto=update
+
+## 🛠️ **Compilar e iniciar la aplicación**
+mvn clean install
+mvn spring-boot:run
+
+🚀 Endpoints disponibles
+1. Artistas
+- POST /artist
+Crea un nuevo artista.
+
+Ejemplo:
+
+JSON:
+
+{
+  "name": "Artista X",
+  "email": "artistx@email.com",
+  "password": "password",
+  "role": "USER"
+}
+- GET /artist
+Devuelve una lista de todos los artistas.
+
+2. Canciones
+- POST /songs
+Crea una canción nueva.
+
+- GET /songs
+Devuelve una lista de todas las canciones.
+
+3. Setlist
+- POST /setlist
+Crea una relación entre un artista y una canción.
+
+🛡️ Seguridad
+🔑 Autenticación con HTTP Basic:
+Se requiere autenticación para proteger algunos recursos específicos.
+Roles disponibles:
+USER: Acceso para artistas y usuarios autenticados.
+Ejemplo de autenticación en Postman:
+
+
+Authorization → Basic Auth
+Username: user@email.com
+Password: tu_contraseña

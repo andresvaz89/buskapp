@@ -1,15 +1,13 @@
-/* package andresvaz.dev.buskapp.controllers;
-
-
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+package andresvaz.dev.buskapp.controllers;
 
 import andresvaz.dev.buskapp.entities.Song;
 import andresvaz.dev.buskapp.services.SongService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/songs")
@@ -18,27 +16,38 @@ public class SongController {
     @Autowired
     private SongService songService;
 
-    @GetMapping
-    public List<Song> listSongs() {
-        return songService.getAllSongs();
+    @PostMapping()
+    public ResponseEntity<Song> addSong(@RequestBody Song song) {
+        return ResponseEntity.ok(songService.addSong(song));
     }
 
-    @PostMapping
-    @PreAuthorize("hasRole('MUSICO')")
-    public Song createSong(@RequestBody Song song, Authentication auth) {
-        return songService.createSong(song, auth.getName());
+    @GetMapping()
+    public ResponseEntity<List<Song>> getAllSongs() {
+        return ResponseEntity.ok(songService.getAllSongs());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Song> getSongById(@PathVariable Long id) {
+        Optional<Song> song = songService.getSongById(id);
+        return song.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('MUSICO')")
-    public Song updateSong(@PathVariable Long id, @RequestBody Song updatedSong, Authentication auth) {
-        return songService.updateSong(id, updatedSong, auth.getName());
+    public ResponseEntity<Song> updateSong(@PathVariable Long id, @RequestBody Song song) {
+        try {
+            return ResponseEntity.ok(songService.updateSong(id, song));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('MUSICO')")
-    public void deleteSong(@PathVariable Long id, Authentication auth) {
-        songService.deleteSong(id, auth.getName());
+    public ResponseEntity<?> deleteSong(@PathVariable Long id) {
+        try {
+            songService.deleteSong(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
- */

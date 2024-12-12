@@ -55,4 +55,8 @@ public class Setlist {
     public void setSong(Song song) {
         this.song = song;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

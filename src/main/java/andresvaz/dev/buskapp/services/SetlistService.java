@@ -1,17 +1,12 @@
-/* package andresvaz.dev.buskapp.services;
+package andresvaz.dev.buskapp.services;
 
-import java.util.List;
-
+import andresvaz.dev.buskapp.entities.Setlist;
+import andresvaz.dev.buskapp.repositories.SetlistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import andresvaz.dev.buskapp.entities.Song;
-import andresvaz.dev.buskapp.entities.Artist;
-import andresvaz.dev.buskapp.entities.Setlist;
-import andresvaz.dev.buskapp.repositories.SongRepository;
-import andresvaz.dev.buskapp.repositories.ArtistRepository;
-import andresvaz.dev.buskapp.repositories.SetlistRepository;
-import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SetlistService {
@@ -19,53 +14,36 @@ public class SetlistService {
     @Autowired
     private SetlistRepository setlistRepository;
 
-    @Autowired
-    private ArtistRepository artistRepository;
+    // Crear un nuevo Setlist
+    public Setlist createSetlist(Setlist setlist) {
+        return setlistRepository.save(setlist);
+    }
 
-    @Autowired
-    private SongRepository songRepository;
-
-    public List<Setlist>getAllSetlists() {
+    // Obtener todos los Setlists
+    public List<Setlist> getAllSetlists() {
         return setlistRepository.findAll();
     }
 
-    public List<Setlist> getAllSetlistsByArtist(Long artistId) {
-        return setlistRepository.findByArtistId(artistId);
+    // Obtener un Setlist por ID
+    public Optional<Setlist> getSetlistById(Long id) {
+        return setlistRepository.findById(id);
     }
 
-    public Setlist createSetlist(Setlist Setlist, Long artistId, List<Long> songId) {
-        Artist artist = artistRepository.findById(artistId)
-                .orElseThrow(() -> new EntityNotFoundException("Músico no encontrado"));
-
-        List<Song> songs = songRepository.findAllById(songId);
-        if (songs.size() != songId.size()) {
-            throw new IllegalArgumentException("Una o más songs no existen");
+    // Actualizar un Setlist
+    public Setlist updateSetlist(Long id, Setlist setlist) {
+        if (setlistRepository.existsById(id)) {
+            setlist.setId(id);
+            return setlistRepository.save(setlist);
         }
-
-        Setlist.setArtist(artist);
-        Setlist.setSongs(songs);
-        return setlistRepository.save(Setlist);
+        return null;
     }
 
-    public Setlist updateSetlist(Long id, Setlist updatedSetlist, List<Long> songId) {
-        Setlist Setlist = setlistRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Setlist no encontrado"));
-
-        List<Song> songs = songRepository.findAllById(songId);
-        if (songs.size() != songId.size()) {
-            throw new IllegalArgumentException("Una o más songs no existen");
+    // Eliminar un Setlist por ID
+    public boolean deleteSetlist(Long id) {
+        if (setlistRepository.existsById(id)) {
+            setlistRepository.deleteById(id);
+            return true;
         }
-
-        Setlist.setGigDate(updatedSetlist.getGigDate());
-        Setlist.setSongs(songs);
-        return setlistRepository.save(Setlist);
-    }
-
-    public void deleteSetlist(Long id) {
-        if (!setlistRepository.existsById(id)) {
-            throw new EntityNotFoundException("Setlist no encontrado");
-        }
-        setlistRepository.deleteById(id);
+        return false;
     }
 }
- */
