@@ -1,8 +1,13 @@
 package andresvaz.dev.buskapp.entities;
 
-import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.util.List;
+
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Setlist {
@@ -11,51 +16,43 @@ public class Setlist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate gigDate;
-
     @ManyToOne
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
-    @ManyToMany
-    @JoinTable(
-        name = "Setlist_song",
-        joinColumns = @JoinColumn(name = "Setlist_id"),
-        inverseJoinColumns = @JoinColumn(name = "song_id")
-    )
-    private List<Song> songs;
+    @ManyToOne
+    @JoinColumn(name = "song_id")
+    private Song song;
 
-    // Getters y Setters
+    // Constructor por defecto
+    public Setlist() {
+    }
 
+    // Constructor con parámetros
+    public Setlist(Artist artist, Song song) {
+        this.artist = artist;
+        this.song = song;
+    }
+
+    // Getters
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDate getGigDate() {
-        return gigDate;
-    }
-
-    public void setGigDate(LocalDate gigDate) {
-        this.gigDate = gigDate;
     }
 
     public Artist getArtist() {
         return artist;
     }
 
+    public Song getSong() {
+        return song;
+    }
+
+    // Setters
     public void setArtist(Artist artist) {
         this.artist = artist;
     }
 
-    public List<Song> getSongs() {
-        return songs;
-    }
-
-    public void setSongs(List<Song> songs) {
-        this.songs = songs;
+    public void setSong(Song song) {
+        this.song = song;
     }
 }

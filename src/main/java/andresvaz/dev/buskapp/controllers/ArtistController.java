@@ -1,66 +1,73 @@
 package andresvaz.dev.buskapp.controllers;
 
-import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import andresvaz.dev.buskapp.entities.Artist;
 import andresvaz.dev.buskapp.services.ArtistService;
-import jakarta.persistence.EntityNotFoundException;
 
-
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/artists")
+@RequestMapping("/artist")
 public class ArtistController {
 
     @Autowired
     private ArtistService artistService;
 
+    /**
+     * Crear un nuevo artista (registro).
+     */
+    @PostMapping
+    public ResponseEntity<Artist> createArtist(@RequestBody Artist artist) {
+        Artist createdArtist = artistService.registerArtist(artist);
+        return ResponseEntity.ok(createdArtist);
+    }
+
+    /**
+     * Obtener la lista de todos los artistas.
+     */
     @GetMapping
     public ResponseEntity<List<Artist>> getAllArtists() {
         return ResponseEntity.ok(artistService.getAllArtists());
     }
 
+    /**
+     * Obtener un artista por su ID.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Artist> getArtistById(@PathVariable Long id) {
-        return artistService.getArtistById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Artist artist = artistService.getArtist(id);
+        if (artist != null) {
+            return ResponseEntity.ok(artist);
+        }
+        return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
-    public ResponseEntity<Artist> addArtist(@RequestBody Artist artist) {
-        return new ResponseEntity<>(artistService.addArtist(artist), HttpStatus.CREATED);
-    }
-
+    /**
+     * Actualizar un artista por su ID.
+     */
     @PutMapping("/{id}")
-    public ResponseEntity<Artist> actualizarArtist(@PathVariable Long id, @RequestBody Artist artist) {
-        try {
-            return ResponseEntity.ok(artistService.updateArtist(id, artist));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Artist> updateArtist(@PathVariable Long id, @RequestBody Artist artistDetails) {
+        Artist updatedArtist = artistService.updateArtist(id, artistDetails);
+        if (updatedArtist != null) {
+            return ResponseEntity.ok(updatedArtist);
         }
+        return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Eliminar un artista por su ID.
+     */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarArtist(@PathVariable Long id) {
-        try {
-            artistService.deleteArtist(id);
-            return ResponseEntity.noContent().build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> deleteArtist(@PathVariable Long id) {
+        boolean deleted = artistService.deleteArtist(id);
+        if (deleted) {
+            return ResponseEntity.ok().build();
         }
+        return ResponseEntity.notFound().build();
     }
 }

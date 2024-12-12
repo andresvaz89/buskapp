@@ -1,4 +1,4 @@
-package andresvaz.dev.buskapp.services;
+/* package andresvaz.dev.buskapp.services;
 
 import java.util.List;
 
@@ -68,3 +68,4 @@ public class SetlistService {
         setlistRepository.deleteById(id);
     }
 }
+ */
