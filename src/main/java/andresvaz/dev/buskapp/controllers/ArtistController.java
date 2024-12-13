@@ -20,7 +20,7 @@ public class ArtistController {
 
   
     @PostMapping
-    public ResponseEntity<Artist> createArtist(@RequestBody Artist artist) {
+    public ResponseEntity<Artist> registerArtist(@RequestBody Artist artist) {
         Artist createdArtist = artistService.registerArtist(artist);
         return ResponseEntity.ok(createdArtist);
     }

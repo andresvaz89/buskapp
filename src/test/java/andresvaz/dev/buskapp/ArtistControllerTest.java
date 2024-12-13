@@ -48,10 +48,10 @@ public class ArtistControllerTest {
     }
 
     @Test
-    public void testCreateArtist() {
+    public void testRegisterArtist() {
         Mockito.when(artistService.registerArtist(any(Artist.class))).thenReturn(artist);
 
-        ResponseEntity<Artist> response = artistController.createArtist(artist);
+        ResponseEntity<Artist> response = artistController.registerArtist(artist);
 
         assertNotNull(response);
         assertEquals(artist, response.getBody());

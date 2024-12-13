@@ -4,6 +4,7 @@ package andresvaz.dev.buskapp.services;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import andresvaz.dev.buskapp.entities.Artist;
@@ -18,7 +19,13 @@ public class ArtistService {
     @Autowired
     private ArtistRepository artistRepository;
 
+   
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public Artist registerArtist(Artist artist) {
+        artist.setPassword(passwordEncoder.encode(artist.getPassword()));
         return artistRepository.save(artist);
     }
 
@@ -36,7 +43,10 @@ public class ArtistService {
             Artist artist = artistOptional.get();
             artist.setName(artistDetails.getName());
             artist.setEmail(artistDetails.getEmail());
-            artist.setPassword(artistDetails.getPassword());
+            if (artistDetails.getPassword() != null && !artistDetails.getPassword().isBlank()) {
+                artist.setPassword(passwordEncoder.encode(artistDetails.getPassword()));
+            }
+    
             return artistRepository.save(artist);
         }
         return null;
