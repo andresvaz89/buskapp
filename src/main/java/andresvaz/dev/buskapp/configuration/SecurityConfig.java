@@ -23,9 +23,8 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> 
                 authz.requestMatchers("/artist/**").permitAll()
-                .requestMatchers("/songs/**").permitAll() // Acceso abierto a todos
-                .requestMatchers("/setlist/**").permitAll() // Acceso abierto a todos
-                   /*  .requestMatchers("/artist/adios").hasAnyAuthority("USER")  */
+                .requestMatchers("/songs/**").permitAll() 
+                .requestMatchers("/setlist/**").permitAll() 
                     .anyRequest().authenticated())
             .httpBasic(Customizer.withDefaults());
         

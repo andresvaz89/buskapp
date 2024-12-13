@@ -22,19 +22,19 @@ public class Song {
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
-    // Constructor por defecto
+  
     public Song() {
     }
 
-    // Constructor con parámetros
+
     public Song(String title, String songKey, String originalArtist, Artist artist) {
         this.title = title;
         this.songKey = songKey;
         this.originalArtist = originalArtist;
         this.artist = artist;
     }
-
-    // Getters
+    
+   
     public Long getId() {
         return id;
     }
@@ -55,7 +55,10 @@ public class Song {
         return artist;
     }
 
-    // Setters
+   
+    public void setId(Long id) {
+        this.id = id;
+    }
     public void setTitle(String title) {
         this.title = title;
     }

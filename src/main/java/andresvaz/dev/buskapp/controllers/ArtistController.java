@@ -18,26 +18,20 @@ public class ArtistController {
     @Autowired
     private ArtistService artistService;
 
-    /**
-     * Crear un nuevo artista (registro).
-     */
+  
     @PostMapping
     public ResponseEntity<Artist> createArtist(@RequestBody Artist artist) {
         Artist createdArtist = artistService.registerArtist(artist);
         return ResponseEntity.ok(createdArtist);
     }
 
-    /**
-     * Obtener la lista de todos los artistas.
-     */
+   
     @GetMapping
     public ResponseEntity<List<Artist>> getAllArtists() {
         return ResponseEntity.ok(artistService.getAllArtists());
     }
 
-    /**
-     * Obtener un artista por su ID.
-     */
+   
     @GetMapping("/{id}")
     public ResponseEntity<Artist> getArtistById(@PathVariable Long id) {
         Artist artist = artistService.getArtist(id);
@@ -64,9 +58,7 @@ public class ArtistController {
         return ResponseEntity.notFound().build();
     }
 
-    /**
-     * Eliminar un artista por su ID.
-     */
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArtist(@PathVariable Long id) {
         boolean deleted = artistService.deleteArtist(id);

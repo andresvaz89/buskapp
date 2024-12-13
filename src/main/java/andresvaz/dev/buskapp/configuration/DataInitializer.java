@@ -37,7 +37,7 @@ public class DataInitializer implements CommandLineRunner {
                 System.out.println("usuario andres creado en la base de datos.");
 
             } else {
-                System.out.println("usuario andres ya.");
+                System.out.println("Usuario andres ya existe en la base de datos.");
             }
 
         } catch (Exception e) {

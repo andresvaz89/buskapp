@@ -21,7 +21,7 @@ public class Artist {
  
   
 
-    // Getters
+ 
     public Long getId() {
         return id;
     }
@@ -42,7 +42,9 @@ public class Artist {
         return role;
     }
 
-    // Setters
+    public void  setId(Long id) {
+        this.id=id;
+    }
     public void setName(String name) {
         this.name = name;
     }

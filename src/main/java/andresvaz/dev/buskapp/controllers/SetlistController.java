@@ -16,20 +16,20 @@ public class SetlistController {
     @Autowired
     private SetlistService setlistService;
 
-    // Crear un nuevo Setlist
+   
     @PostMapping
     public ResponseEntity<Setlist> createSetlist(@RequestBody Setlist setlist) {
         Setlist createdSetlist = setlistService.createSetlist(setlist);
         return ResponseEntity.ok(createdSetlist);
     }
 
-    // Obtener todos los Setlists
+   
     @GetMapping
     public ResponseEntity<List<Setlist>> getAllSetlists() {
         return ResponseEntity.ok(setlistService.getAllSetlists());
     }
 
-    // Obtener un Setlist por ID
+
     @GetMapping("/{id}")
     public ResponseEntity<Setlist> getSetlist(@PathVariable Long id) {
         Optional<Setlist> setlist = setlistService.getSetlistById(id);
@@ -37,7 +37,7 @@ public class SetlistController {
                       .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Actualizar un Setlist
+  
     @PutMapping("/{id}")
     public ResponseEntity<Setlist> updateSetlist(@PathVariable Long id, @RequestBody Setlist setlist) {
         Setlist updatedSetlist = setlistService.updateSetlist(id, setlist);
@@ -46,7 +46,7 @@ public class SetlistController {
             : ResponseEntity.notFound().build();
     }
 
-    // Eliminar un Setlist por ID
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteSetlist(@PathVariable Long id) {
         boolean deleted = setlistService.deleteSetlist(id);

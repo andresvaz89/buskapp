@@ -28,13 +28,13 @@ public class Setlist {
     public Setlist() {
     }
 
-    // Constructor con parámetros
+   
     public Setlist(Artist artist, Song song) {
         this.artist = artist;
         this.song = song;
     }
 
-    // Getters
+   
     public Long getId() {
         return id;
     }
@@ -47,7 +47,7 @@ public class Setlist {
         return song;
     }
 
-    // Setters
+   
     public void setArtist(Artist artist) {
         this.artist = artist;
     }
